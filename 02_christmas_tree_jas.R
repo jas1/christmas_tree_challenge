@@ -41,6 +41,49 @@ ret_tree_1 <- plot_tree(tree1, only_living = TRUE)
 #ggsave("random_length_survivial_28_iter_len_2.png")
 # ony_living excludes all dead segments from the plot
 
+
+
+tree1_clean <- clean_tree(tree1)
+
+# inspect the clean tree
+tree1_clean
+
+# create plot of clean tree manually
+p1 <- tree1_clean %>% 
+  ggplot(aes(x = x, y = y, group = id, 
+             size = 1 / generation, 
+             color = generation)) +
+  geom_line(lineend = "round") +
+  scale_color_tree() +
+  theme_void() +
+  theme(legend.position = "none") + 
+  coord_equal()
+
+# set random seed
+set.seed(42)
+# extract 30 random basal ends of the terminal branches
+baubles <- filter(tree1_clean, 
+                  generation == 25,
+                  pos == 0) %>% 
+  sample_n(30)
+
+# add baubles to the tree
+p1 +
+  # red baubles with black outlines
+  geom_point(data = baubles, aes(x = x, y = y), 
+             fill = "#AA1243", col = 1, pch = 21, size = 5) +
+  # white transparent shine (with a small offset to avoid the center)
+  geom_point(data = baubles, aes(x = x, y = y), 
+             col = "white", alpha = 0.3, size = 1,
+             position = position_nudge(x = -0.08, y = 0.08)
+  )
+
+
+#ggsave("random_xmas_tree_try_3.png")
+
+# till here ---------------------------------------------------------------
+
+
 # 2. More realistic tree ------------------------------------------------------
 # angle defined as a function of generation and parent angle;
 # symmetric bifurcation with increasing average angle and variability in
@@ -91,6 +134,8 @@ tree2 <- grow_tree(n_iter = 25,
 
 # plot tree
 plot_tree(tree2)
+
+# ggsave("playing_around_3.png")
 
 
 # 3. Modifying plots of trees -------------------------------------------------

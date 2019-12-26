@@ -78,7 +78,7 @@ p1 +
              position = position_nudge(x = -0.08, y = 0.08)
   )
 
-
+# think it was 2nd run of seed :P
 #ggsave("random_xmas_tree_try_3.png")
 
 # till here ---------------------------------------------------------------
